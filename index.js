@@ -2,6 +2,7 @@
 
 import express from 'express';
 import morgan from 'morgan';
+import path from 'path';
 
 const SRVDIR = process.env.SRV_DIR || './public';
 const PORT = process.env.PORT || 80;
@@ -24,6 +25,11 @@ if(process.env.NODE_ENV !== 'testing'){
 }
 
 app.use(express.static(SRVDIR));
+
+// Handle all SPA routes
+app.get('/{*splat}', (req, res) => {
+  res.sendFile(path.resolve(SRVDIR,'index.html'));
+});
 
 app.listen(PORT, () => {
   console.log(`Serving ${SRVDIR} on port ${PORT}`);
